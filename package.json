@@ -1,0 +1,19 @@
+{
+    "name": "private-discord-bot",
+    "version": "1.0.0",
+    "description": "",
+    "main": "main.py",
+    "scripts": {
+      "start": "node index.js"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/Roseu7/discord.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+      "url": "https://github.com/Roseu7/discord/issues"
+    },
+    "homepage": "https://github.com/Roseu7/discord#readme"
+  }
