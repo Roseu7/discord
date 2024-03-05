@@ -161,18 +161,25 @@ class Test(Client):
       for member in guild.members:
         if member.id in osu_link:
           if "<pp>" in member.display_name:
-            base_name[member.id, guild.id] = member.display_name
+            base_name[member.id, guild.id] = [member.display_name, None]
             name_dump(base_name)
             for k, v in base_name.items():
               if guild.id in k:
-                new_name = member.display_name.replace(
-                    "<pp>", str(osu_now_pp(osu_link[member.id])))
+                new_name = member.display_name.replace("<pp>", str(osu_now_pp(osu_link[member.id])))
+                l = list(base_name[member.id, guild.id])
+                l[1] = new_name
+                base_name[member.id, guild.id] = l
+                name_dump(base_name)
+
           else:
             if (member.id, guild.id) in base_name:
               for k, v in base_name.items():
-                if guild.id in k:
-                  new_name = str(base_name[member.id, guild.id]).replace(
-                      "<pp>", str(osu_now_pp(osu_link[member.id])))
+                if guild.id in k and base_name[member.id, guild.id][1] == member.display_name:
+                  new_name = str(base_name[member.id, guild.id]).replace("<pp>", str(osu_now_pp(osu_link[member.id])))
+                  l = list(base_name[member.id, guild.id])
+                  l[1] = new_name
+                  base_name[member.id, guild.id] = l
+                  name_dump(base_name)
             else:
               new_name = None
           try:
