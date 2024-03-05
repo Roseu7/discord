@@ -43,20 +43,16 @@ class OsuGroup(Group):
     global osu_link
     id = osu_id_convert(name)
     if id == None:
-      await inter.response.send_message(f"{name}のosu情報が見つかりませんでした。",
-                                        ephemeral=True)
+      await inter.response.send_message(f"{name}のosu情報が見つかりませんでした。",ephemeral=True)
     else:
       if inter.user.id in osu_link:
         if (inter.user.id, id) in osu_link.items():
-          await inter.response.send_message(f"{name}のosu情報はすでに紐づけられています。",
-                                            ephemeral=True)
+          await inter.response.send_message(f"{name}のosu情報はすでに紐づけられています。",ephemeral=True)
         else:
           old_name = osu_name_convert(osu_link(inter.user.id))
           osu_link[inter.user.id] = id
           osu_dump(osu_link)
-          await inter.response.send_message(
-              f"{inter.user.mention}に紐づけられているosu情報を{old_name}から{name}に変更しました。",
-              ephemeral=True)
+          await inter.response.send_message(f"{inter.user.mention}に紐づけられているosu情報を{old_name}から{name}に変更しました。",ephemeral=True)
 
   @app_commands.command(name="refresh",
                         description="osuの情報を更新します。ニックネーム内のppも更新されます。")
@@ -66,9 +62,15 @@ class OsuGroup(Group):
 
   @app_commands.command(name="delete", description="紐づけ情報を削除します。")
   async def delete(self, inter: Interaction):
+    global osu_link, base_name
     if inter.user.id in osu_link:
       del osu_link[inter.user.id]
       osu_dump(osu_link)
+      for guild in client.guilds:
+        for member in guild.members:
+          if member.id == inter.user.id:
+            del base_name[member.id, guild.id]
+            name_dump(base_name)
       await inter.response.send_message(
           f"{inter.user.mention}に紐づけられているosu情報を削除しました。", ephemeral=True)
 
