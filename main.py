@@ -175,7 +175,7 @@ class Test(Client):
             if (member.id, guild.id) in base_name:
               for k, v in base_name.items():
                 if guild.id in k and base_name[member.id, guild.id][1] == member.display_name:
-                  new_name = str(base_name[member.id, guild.id]).replace("<pp>", str(osu_now_pp(osu_link[member.id])))
+                  new_name = str(base_name[member.id, guild.id][0]).replace("<pp>", str(osu_now_pp(osu_link[member.id])))
                   l = list(base_name[member.id, guild.id])
                   l[1] = new_name
                   base_name[member.id, guild.id] = l
@@ -324,4 +324,3 @@ async def message_forward(inter: Interaction, message: Message):
                                     ephemeral=True)
 
 client.run(TOKEN)
-
