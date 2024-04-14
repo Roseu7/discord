@@ -168,9 +168,9 @@ class Valo(Group):
           pick.append(chara_sen[n[i]])
         message += f"センチネル{sen}人\n"
         chara_all = list(set(chara_all) - set(chara_sen))
-      elif role > 5:
-        n = sample(range(len(chara_all)), 5-role)
-        for i in range(5-role):
+      elif role < player:
+        n = sample(range(len(chara_all)), player-role)
+        for i in range(player-role):
           pick.append(chara_all[n[i]])
       for i in range(len(pick)):
         message += f"{pick[i][1]}"
