@@ -113,7 +113,7 @@ class Valo(Group):
 
   #valomapコマンド
   @app_commands.command(name="map", description="VALORANTのマップをランダムにピックします。")
-  async def valomap(inter: Interaction):
+  async def valomap(self, inter: Interaction):
     map_list = ["サンセット", "ロータス", "パール", "フラクチャー", "ブリーズ", "アイスボックス", "バインド", "ヘイブン", "スプリット", "アセント"]
     n = randint(0, 9)
     await inter.response.send_message(f"{map_list[n]}")
@@ -122,7 +122,7 @@ class Valo(Group):
   @app_commands.command(name="chara", description="VALORANTのキャラをランダムにピックします。(イメージ画像：白椅ぬゐ @VshiroinuV)")
   @app_commands.rename(player="人数", due="デュエリスト", ini="イニシエーター", con="コントローラー", sen="センチネル")
   @app_commands.describe(player="ランダムピックする人数を指定してください。", due="デュエリストの人数を指定してください。", ini="イニシエーターの人数を指定してください。", con="コントローラーの人数を指定してください。", sen="センチネルの人数を指定してください。")
-  async def valochara(inter: Interaction, player: Optional[Literal[1, 2, 3, 4, 5]], due: Optional[Literal[1, 2, 3, 4, 5]], ini: Optional[Literal[1, 2, 3, 4, 5]], con: Optional[Literal[1, 2, 3, 4, 5]], sen: Optional[Literal[1, 2, 3, 4, 5]]):
+  async def valochara(self, inter: Interaction, player: Optional[Literal[1, 2, 3, 4, 5]], due: Optional[Literal[1, 2, 3, 4, 5]], ini: Optional[Literal[1, 2, 3, 4, 5]], con: Optional[Literal[1, 2, 3, 4, 5]], sen: Optional[Literal[1, 2, 3, 4, 5]]):
     chara_due = [["ジェット", "https://i.imgur.com/1smAXBm.png"], ["レイズ", "https://i.imgur.com/OAjVIU7.png"], ["フェニックス", "https://i.imgur.com/kamtBa6.png"], ["レイナ", "https://i.imgur.com/5CnffnS.png"], ["ヨル", "https://i.imgur.com/5A1tfFm.png"], ["ネオン", "https://i.imgur.com/NuTAgT5.png"], ["アイソ", "https://i.imgur.com/WX5Q9hu.png"]]
     chara_ini = [["ブリーチ", "https://i.imgur.com/r7ztSJy.png"], ["ソーヴァ", "https://i.imgur.com/0Ypzk3f.png"], ["スカイ", "https://i.imgur.com/HJXQQFh.png"], ["KAY/O", "https://i.imgur.com/Jc5eyrp.png"], ["フェイド", "https://i.imgur.com/RiZ4ARQ.png"], ["ゲッコー", "https://i.imgur.com/FzuVP3t.png"]]
     chara_con = [["オーメン", "https://i.imgur.com/CX8KJx2.png"], ["ブリムストーン", "https://i.imgur.com/S0NbBGB.png"], ["ヴァイパー", "https://i.imgur.com/1oq94o0.png"], ["アストラ", "https://i.imgur.com/OQbs4Ja.png"], ["ハーバー", "https://i.imgur.com/iujL1nN.png"], ["クローヴ", "https://i.imgur.com/052XxDn.png"]]
