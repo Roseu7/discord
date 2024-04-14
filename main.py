@@ -114,31 +114,32 @@ class Valo(Group):
   #valomapコマンド
   @app_commands.command(name="map", description="VALORANTのマップをランダムにピックします。")
   async def valomap(self, inter: Interaction):
-    map_list = [["サンセット", "https://images.contentstack.io/v3/assets/bltb6530b271fddd0b1/blt9053fb44094718e6/64e934091ab3c3ccb703dd43/SUNSET_LoadingScreen_Desktop.png"],
-                ["ロータス", "https://images.contentstack.io/v3/assets/bltb6530b271fddd0b1/bltaae67d0ec5006ef5/63b8a78d28c9fb7a1880a9e2/Lotus_MapWebsite_Web.png"],
-                ["パール", "https://images.contentstack.io/v3/assets/bltb6530b271fddd0b1/blte17f24241398ef2a/62b1c4691944ac5ac426350d/PearlLoadingScreen_MapFeaturedImage_930x522.png"],
-                ["フラクチャー", "https://images.contentstack.io/v3/assets/bltb6530b271fddd0b1/bltf4485163c8c5873c/6131b23e9db95e7ff74b6393/Valorant_FRACTURE_Minimap_Alpha_web.png"],
-                ["ブリーズ", "https://images.contentstack.io/v3/assets/bltb6530b271fddd0b1/bltb03d2e4867f2e324/607f995892f0063e5c0711bd/breeze-featured_v1.png"],
-                ["アイスボックス", "https://images.contentstack.io/v3/assets/bltb6530b271fddd0b1/bltde02911a015d7ef9/5f80d2851f5f6d4173b4e49d/Icebox_transparentbg_for_Web.png"],
-                ["バインド", "https://images.contentstack.io/v3/assets/bltb6530b271fddd0b1/blt8538036a309525ae/5ebc470bfd85ad7411ce6b50/bind-featured.png"],
-                ["ヘイブン", "https://images.contentstack.io/v3/assets/bltb6530b271fddd0b1/blt8afb5b8145f5e9b2/5ebc46f7b8c49976b71c0bc5/haven-featured.png"],
-                ["スプリット", "https://images.contentstack.io/v3/assets/bltb6530b271fddd0b1/bltd188c023f88f7d91/5ebc46db20f7727335261fcd/split-featured.png"],
-                ["アセント", "https://images.contentstack.io/v3/assets/bltb6530b271fddd0b1/blta9b912e1a1b59aa4/5ebc471cfa550001f72bcb13/ascent-featured.png"]]
+    map_list = [["サンセット", "png\valo\sunset.png"],
+                ["ロータス", "png\valo\lotus.png"],
+                ["パール", "png\valo\pearl.png"],
+                ["フラクチャー", "png\valo\fracture.png"],
+                ["ブリーズ", "png\valo\breeze.png"],
+                ["アイスボックス", "png\valo\icebox.png"],
+                ["バインド", "png\valo\bind.png"],
+                ["ヘイブン", "png\valo\haven.png"],
+                ["スプリット", "png\valo\split.png"],
+                ["アセント", "png\valo\ascent.png"]]
     n = randint(0, 9)
-    await inter.response.send_message(f"{map_list[n][1]}\n{map_list[n][0]}")
+    await inter.response.send_message(f"{map_list[n][0]}", file=map_list[n][1])
 
   #valocharaコマンド
   @app_commands.command(name="chara", description="VALORANTのキャラをランダムにピックします。(イメージ画像：白椅ぬゐ @VshiroinuV)")
   @app_commands.rename(player="人数", due="デュエリスト", ini="イニシエーター", con="コントローラー", sen="センチネル")
   @app_commands.describe(player="ランダムピックする人数を指定してください。", due="デュエリストの人数を指定してください。", ini="イニシエーターの人数を指定してください。", con="コントローラーの人数を指定してください。", sen="センチネルの人数を指定してください。")
   async def valochara(self, inter: Interaction, player: Optional[Literal[1, 2, 3, 4, 5]] = 5, due: Optional[Literal[1, 2, 3, 4, 5]] = 0, ini: Optional[Literal[1, 2, 3, 4, 5]] = 0, con: Optional[Literal[1, 2, 3, 4, 5]] = 0, sen: Optional[Literal[1, 2, 3, 4, 5]] = 0):
-    chara_due = [["ジェット", "https://i.imgur.com/1smAXBm.png"], ["レイズ", "https://i.imgur.com/OAjVIU7.png"], ["フェニックス", "https://i.imgur.com/kamtBa6.png"], ["レイナ", "https://i.imgur.com/5CnffnS.png"], ["ヨル", "https://i.imgur.com/5A1tfFm.png"], ["ネオン", "https://i.imgur.com/NuTAgT5.png"], ["アイソ", "https://i.imgur.com/WX5Q9hu.png"]]
-    chara_ini = [["ブリーチ", "https://i.imgur.com/r7ztSJy.png"], ["ソーヴァ", "https://i.imgur.com/0Ypzk3f.png"], ["スカイ", "https://i.imgur.com/HJXQQFh.png"], ["KAY/O", "https://i.imgur.com/Jc5eyrp.png"], ["フェイド", "https://i.imgur.com/RiZ4ARQ.png"], ["ゲッコー", "https://i.imgur.com/FzuVP3t.png"]]
-    chara_con = [["オーメン", "https://i.imgur.com/CX8KJx2.png"], ["ブリムストーン", "https://i.imgur.com/S0NbBGB.png"], ["ヴァイパー", "https://i.imgur.com/1oq94o0.png"], ["アストラ", "https://i.imgur.com/OQbs4Ja.png"], ["ハーバー", "https://i.imgur.com/iujL1nN.png"], ["クローヴ", "https://i.imgur.com/052XxDn.png"]]
-    chara_sen = [["セージ", "https://i.imgur.com/AhtIQ5M.png"], ["サイファー", "https://i.imgur.com/uTxNMz5.png"], ["キルジョイ", "https://i.imgur.com/Ou2fJhk.png"], ["チェンバー", "https://i.imgur.com/UqUhz15.png"], ["デッドロック", "https://i.imgur.com/dETijfG.png"]]
+    chara_due = [["ジェット", "png\valo\JETT.png"], ["レイズ", "png\valo\RAZE.png"], ["フェニックス", "png\valo\PHOENIX.png"], ["レイナ", "png\valo\RAYNA.png"], ["ヨル", "png\valo\YORU.png"], ["ネオン", "png\valo\NEON.png"], ["アイソ", "png\valo\ISO.png"]]
+    chara_ini = [["ブリーチ", "png\valo\BREACH.png"], ["ソーヴァ", "png\valo\SOVA.png"], ["スカイ", "png\valo\SKYE.png"], ["KAY/O", "png\valo\KAYO.png"], ["フェイド", "png\valo\FADE.png"], ["ゲッコー", "png\valo\GEKKO.png"]]
+    chara_con = [["オーメン", "png\valo\OMEN.png"], ["ブリムストーン", "png\valo\BRIMSTONE.png"], ["ヴァイパー", "png\valo\VIPER.png"], ["アストラ", "png\valo\ASTRA.png"], ["ハーバー", "png\valo\HARBOR.png"], ["クローヴ", "png\valo\CLOVE.png"]]
+    chara_sen = [["セージ", "png\valo\SAGE.png"], ["サイファー", "png\valo\CYPHER.png"], ["キルジョイ", "png\valo\KILLJOY.png"], ["チェンバー", "png\valo\CHAMBER.png"], ["デッドロック", "png\valo\DEADLOCK.png"]]
     chara_all = chara_due+chara_ini+chara_con+chara_sen
     pick = []
     message = ""
+    images = []
     role = due+ini+con+sen
 
     if player < role:
@@ -149,34 +150,34 @@ class Valo(Group):
         for i in range(due):
           pick.append(chara_due[n[i]])
         message += f"デュエリスト{due}人\n"
-        chara_all = list(set(chara_all) - set(chara_due))
+        chara_all = list(filter(lambda x: x not in chara_due, chara_all))
       elif ini != 0:
         n = sample(range(len(chara_ini)), ini)
         for i in range(ini):
           pick.append(chara_ini[n[i]])
         message += f"イニシエーター{ini}人\n"
-        chara_all = list(set(chara_all) - set(chara_ini))
+        chara_all = list(filter(lambda x: x not in chara_ini, chara_all))
       elif con != 0:
         n = sample(range(len(chara_con)), con)
         for i in range(con):
           pick.append(chara_con[n[i]])
         message += f"コントローラー{con}人\n"
-        chara_all = list(set(chara_all) - set(chara_con))
+        chara_all = list(filter(lambda x: x not in chara_con, chara_all))
       elif sen != 0:
         n = sample(range(len(chara_sen)), sen)
         for i in range(sen):
           pick.append(chara_sen[n[i]])
         message += f"センチネル{sen}人\n"
-        chara_all = list(set(chara_all) - set(chara_sen))
+        chara_all = list(filter(lambda x: x not in chara_sen, chara_all))
       elif role < player:
         n = sample(range(len(chara_all)), player-role)
         for i in range(player-role):
           pick.append(chara_all[n[i]])
-      for i in range(len(pick)):
-        message += f"{pick[i][1]}"
+        message += f"ランダム{n}人\n"
       for i in range(len(pick)):
         message += f"{pick[i][0]} "
-      await inter.response.send_message(message)
+        images.appned(pick[i][1])
+      await inter.response.send_message(message, files=images)
 
 #クライアントクラス
 class Test(Client):
