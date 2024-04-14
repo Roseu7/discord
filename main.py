@@ -171,31 +171,31 @@ class Valo(Group):
           pick.append(chara_due[n[i]])
         message += f"デュエリスト{due}人\n"
         chara_all = list(filter(lambda x: x not in chara_due, chara_all))
-      elif ini != 0:
+      if ini != 0:
         n = sample(range(len(chara_ini)), ini)
         for i in range(ini):
           pick.append(chara_ini[n[i]])
         message += f"イニシエーター{ini}人\n"
         chara_all = list(filter(lambda x: x not in chara_ini, chara_all))
-      elif con != 0:
+      if con != 0:
         n = sample(range(len(chara_con)), con)
         for i in range(con):
           pick.append(chara_con[n[i]])
         message += f"コントローラー{con}人\n"
         chara_all = list(filter(lambda x: x not in chara_con, chara_all))
-      elif sen != 0:
+      if sen != 0:
         n = sample(range(len(chara_sen)), sen)
         for i in range(sen):
           pick.append(chara_sen[n[i]])
         message += f"センチネル{sen}人\n"
         chara_all = list(filter(lambda x: x not in chara_sen, chara_all))
-      elif role < player:
+      if role < player:
         n = sample(range(len(chara_all)), player-role)
         for i in range(player-role):
           pick.append(chara_all[n[i]])
-        message += f"ランダム{n}人\n"
+        message += f"ランダム{len(n)}人\n"
       for i in range(len(pick)):
-        message += f"{pick[i][0]} "
+        message += f"{pick[i][0]}　　"
         images.append(File(pick[i][1]))
       await inter.response.send_message(message, files=images)
 
