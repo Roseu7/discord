@@ -77,16 +77,16 @@ class MLink(Group):
 
   @app_commands.command(name="new", description="現在のアカウントともう一つのアカウントのメンションを紐づけます。")
   @app_commands.rename(acc="アカウント")
-  async def new(self, inter: Interaction, acc1: discord.Member):
+  async def new(self, inter: Interaction, acc: discord.Member):
     global links
 
     acc2 = inter.user.mention
-    if [acc1.mention, acc2] in links or [acc2, acc1.mention] in links:
+    if [acc.mention, acc2] in links or [acc2, acc.mention] in links:
       await inter.response.send_message(f"すでにリンクされています。", ephemeral=True)
     else:
-      links.append([acc1.mention, acc2])
+      links.append([acc.mention, acc2])
       link_dump(links)
-      await inter.response.send_message(f"現在のアカウントと{acc1.mention}のメンションを紐づけました。", ephemeral=True)
+      await inter.response.send_message(f"現在のアカウントと{acc.mention}のメンションを紐づけました。", ephemeral=True)
 
   @app_commands.command(name="delete", description="現在のアカウントともう一つのアカウントの紐づけを解除します。")
   @app_commands.rename(acc1="紐づけたアカウント")
