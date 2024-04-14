@@ -107,6 +107,58 @@ class MLink(Group):
   # @app_commands.command(name="setup", description="このチャンネルにアカウントリンクのボタンを作成します。")
   # async def setup(self, inter: Interaction):
 
+class Valo(Group):
+  def __init__(self):
+    super().__init__(name="valo", description="VALORANT関連のコマンドです。")
+
+  #valomapコマンド
+  @app_commands.command(name="map", description="VALORANTのマップをランダムにピックします。")
+  async def valomap(inter: Interaction):
+    map_list = ["サンセット", "ロータス", "パール", "フラクチャー", "ブリーズ", "アイスボックス", "バインド", "ヘイブン", "スプリット", "アセント"]
+    n = randint(0, 9)
+    await inter.response.send_message(f"{map_list[n]}")
+
+  #valocharaコマンド
+  @app_commands.command(name="chara", description="VALORANTのキャラをランダムにピックします。(イメージ画像：白椅ぬゐ @VshiroinuV)")
+  @app_commands.rename(player="人数", due="デュエリスト", ini="イニシエーター", con="コントローラー", sen="センチネル")
+  @app_commands.describe(player="ランダムピックする人数を指定してください。", due="デュエリストの人数を指定してください。", ini="イニシエーターの人数を指定してください。", con="コントローラーの人数を指定してください。", sen="センチネルの人数を指定してください。")
+  async def valochara(inter: Interaction, player: Optional[Literal[1, 2, 3, 4, 5]], due: Optional[Literal[1, 2, 3, 4, 5]], ini: Optional[Literal[1, 2, 3, 4, 5]], con: Optional[Literal[1, 2, 3, 4, 5]], sen: Optional[Literal[1, 2, 3, 4, 5]]):
+    chara_due = [["ジェット", "https://i.imgur.com/1smAXBm.png"], ["レイズ", "https://i.imgur.com/OAjVIU7.png"], ["フェニックス", "https://i.imgur.com/kamtBa6.png"], ["レイナ", "https://i.imgur.com/5CnffnS.png"], ["ヨル", "https://i.imgur.com/5A1tfFm.png"], ["ネオン", "https://i.imgur.com/NuTAgT5.png"], ["アイソ", "https://i.imgur.com/WX5Q9hu.png"]]
+    chara_ini = [["ブリーチ", "https://i.imgur.com/r7ztSJy.png"], ["ソーヴァ", "https://i.imgur.com/0Ypzk3f.png"], ["スカイ", "https://i.imgur.com/HJXQQFh.png"], ["KAY/O", "https://i.imgur.com/Jc5eyrp.png"], ["フェイド", "https://i.imgur.com/RiZ4ARQ.png"], ["ゲッコー", "https://i.imgur.com/FzuVP3t.png"]]
+    chara_con = [["オーメン", "https://i.imgur.com/CX8KJx2.png"], ["ブリムストーン", "https://i.imgur.com/S0NbBGB.png"], ["ヴァイパー", "https://i.imgur.com/1oq94o0.png"], ["アストラ", "https://i.imgur.com/OQbs4Ja.png"], ["ハーバー", "https://i.imgur.com/iujL1nN.png"], ["クローヴ", "https://i.imgur.com/052XxDn.png"]]
+    chara_sen = [["セージ", "https://i.imgur.com/AhtIQ5M.png"], ["サイファー", "https://i.imgur.com/uTxNMz5.png"], ["キルジョイ", "https://i.imgur.com/Ou2fJhk.png"], ["チェンバー", "https://i.imgur.com/UqUhz15.png"], ["デッドロック", "https://i.imgur.com/dETijfG.png"]]
+    pick = []
+    message = ""
+    if player < due + ini + con + sen:
+      await inter.response.send_message("ロール指定数の合計がプレイヤー数を超えています。", ephemeral=True)
+    else:
+      if due:
+        n = sample(range(len(chara_due)), due)
+        for i in range(due):
+          pick.append(chara_due[n[i]])
+        message += f"デュエリスト{due}人\n"
+      elif ini:
+        n = sample(range(len(chara_ini)), ini)
+        for i in range(ini):
+          pick.append(chara_ini[n[i]])
+        message += f"イニシエーター{ini}人\n"
+      elif con:
+        n = sample(range(len(chara_con)), con)
+        for i in range(con):
+          pick.append(chara_con[n[i]])
+        message += f"コントローラー{con}人\n"
+      elif sen:
+        n = sample(range(len(chara_sen)), sen)
+        for i in range(sen):
+          pick.append(chara_sen[n[i]])
+        message += f"センチネル{sen}人\n"
+      for i in range(len(pick)):
+        message += f"{pick[i][1]}"
+      for i in range(len(pick)):
+        message += f"{pick[i][0]} "
+      await inter.response.send_message(message)
+
+
 #クライアントクラス
 class Test(Client):
 
@@ -316,49 +368,4 @@ async def message_forward(inter: Interaction, message: Message):
                                     view=send_channel_view,
                                     ephemeral=True)
   
-#valomapコマンド
-@client.tree.command(name="map", description="VALORANTのマップをランダムにピックします。")
-async def valomap(inter: Interaction):
-  map_list = ["サンセット", "ロータス", "パール", "フラクチャー", "ブリーズ", "アイスボックス", "バインド", "ヘイブン", "スプリット", "アセント"]
-  n = randint(0, 9)
-  await inter.response.send_message(f"{map_list[n]}")
-
-#valocharaコマンド
-@client.tree.command(name="chara", description="VALORANTのキャラをランダムにピックします。(イメージ画像：白椅ぬゐ @VshiroinuV)")
-async def valochara(inter: Interaction, player: Optional[Literal[1, 2, 3, 4, 5]], due: Optional[Literal[1, 2, 3, 4, 5]], ini: Optional[Literal[1, 2, 3, 4, 5]], con: Optional[Literal[1, 2, 3, 4, 5]], sen: Optional[Literal[1, 2, 3, 4, 5]]):
-  chara_due = [["ジェット", "https://i.imgur.com/1smAXBm.png"], ["レイズ", "https://i.imgur.com/OAjVIU7.png"], ["フェニックス", "https://i.imgur.com/kamtBa6.png"], ["レイナ", "https://i.imgur.com/5CnffnS.png"], ["ヨル", "https://i.imgur.com/5A1tfFm.png"], ["ネオン", "https://i.imgur.com/NuTAgT5.png"], ["アイソ", "https://i.imgur.com/WX5Q9hu.png"]]
-  chara_ini = [["ブリーチ", "https://i.imgur.com/r7ztSJy.png"], ["ソーヴァ", "https://i.imgur.com/0Ypzk3f.png"], ["スカイ", "https://i.imgur.com/HJXQQFh.png"], ["KAY/O", "https://i.imgur.com/Jc5eyrp.png"], ["フェイド", "https://i.imgur.com/RiZ4ARQ.png"], ["ゲッコー", "https://i.imgur.com/FzuVP3t.png"]]
-  chara_con = [["オーメン", "https://i.imgur.com/CX8KJx2.png"], ["ブリムストーン", "https://i.imgur.com/S0NbBGB.png"], ["ヴァイパー", "https://i.imgur.com/1oq94o0.png"], ["アストラ", "https://i.imgur.com/OQbs4Ja.png"], ["ハーバー", "https://i.imgur.com/iujL1nN.png"], ["クローヴ", "https://i.imgur.com/052XxDn.png"]]
-  chara_sen = [["セージ", "https://i.imgur.com/AhtIQ5M.png"], ["サイファー", "https://i.imgur.com/uTxNMz5.png"], ["キルジョイ", "https://i.imgur.com/Ou2fJhk.png"], ["チェンバー", "https://i.imgur.com/UqUhz15.png"], ["デッドロック", "https://i.imgur.com/dETijfG.png"]]
-  pick = []
-  message = ""
-  if player < due + ini + con + sen:
-    await inter.response.send_message("ロール指定数の合計がプレイヤー数を超えています。", ephemeral=True)
-  else:
-    if due:
-      n = sample(range(len(chara_due)), due)
-      for i in range(due):
-        pick.append(chara_due[n[i]])
-      message += f"デュエリスト{due}人\n"
-    elif ini:
-      n = sample(range(len(chara_ini)), ini)
-      for i in range(ini):
-        pick.append(chara_ini[n[i]])
-      message += f"イニシエーター{ini}人\n"
-    elif con:
-      n = sample(range(len(chara_con)), con)
-      for i in range(con):
-        pick.append(chara_con[n[i]])
-      message += f"コントローラー{con}人\n"
-    elif sen:
-      n = sample(range(len(chara_sen)), sen)
-      for i in range(sen):
-        pick.append(chara_sen[n[i]])
-      message += f"センチネル{sen}人\n"
-    for i in range(len(pick)):
-      message += f"{pick[i][1]}"
-    for i in range(len(pick)):
-      message += f"{pick[i][0]} "
-    await inter.response.send_message(message)
-
 client.run(TOKEN)
