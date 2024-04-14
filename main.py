@@ -1,6 +1,7 @@
 import os
 import pprint
-from random import randint
+from typing import Optional, Literal
+from random import randint, sample
 
 import discord
 from discord import Intents, Client, Interaction, Message, app_commands, Embed, ui, ButtonStyle, ChannelType
@@ -24,17 +25,13 @@ class OsuGroup(Group):
     global osu_link
     id = osu_id_convert(name)
     if id == None:
-      await inter.response.send_message(f"{name}のosu情報が見つかりませんでした。",
-                                        ephemeral=True)
+      await inter.response.send_message(f"{name}のosu情報が見つかりませんでした。", ephemeral=True)
     elif inter.user.id in osu_link:
-      await inter.response.send_message(
-          f"{name}のosu情報はすでにあなたのアカウントに紐づいています。変更する場合は'/osu edit'を利用してください。",
-          ephemeral=True)
+      await inter.response.send_message(f"{name}のosu情報はすでにあなたのアカウントに紐づいています。変更する場合は'/osu edit'を利用してください。", ephemeral=True)
     else:
       osu_link[inter.user.id] = id
       osu_dump(osu_link)
-      await inter.response.send_message(
-          f"{inter.user.mention}と{name}のosu情報を紐づけました。", ephemeral=True)
+      await inter.response.send_message(f"{inter.user.mention}と{name}のosu情報を紐づけました。", ephemeral=True)
 
   @app_commands.command(name="edit", description="紐づけ情報を修正します。")
   @app_commands.rename(name="ユーザー名")
@@ -43,19 +40,18 @@ class OsuGroup(Group):
     global osu_link
     id = osu_id_convert(name)
     if id == None:
-      await inter.response.send_message(f"{name}のosu情報が見つかりませんでした。",ephemeral=True)
+      await inter.response.send_message(f"{name}のosu情報が見つかりませんでした。", ephemeral=True)
     else:
       if inter.user.id in osu_link:
         if (inter.user.id, id) in osu_link.items():
-          await inter.response.send_message(f"{name}のosu情報はすでに紐づけられています。",ephemeral=True)
+          await inter.response.send_message(f"{name}のosu情報はすでに紐づけられています。", ephemeral=True)
         else:
           old_name = osu_name_convert(osu_link(inter.user.id))
           osu_link[inter.user.id] = id
           osu_dump(osu_link)
-          await inter.response.send_message(f"{inter.user.mention}に紐づけられているosu情報を{old_name}から{name}に変更しました。",ephemeral=True)
+          await inter.response.send_message(f"{inter.user.mention}に紐づけられているosu情報を{old_name}から{name}に変更しました。", ephemeral=True)
 
-  @app_commands.command(name="refresh",
-                        description="osuの情報を更新します。ニックネーム内のppも更新されます。")
+  @app_commands.command(name="refresh",description="osuの情報を更新します。ニックネーム内のppも更新されます。")
   async def refresh(self, inter: Interaction):
     client.schedule.restart()
     await inter.response.send_message("osuの情報を更新しました。", ephemeral=True)
@@ -79,39 +75,37 @@ class MLink(Group):
   def __init__(self):
     super().__init__(name="mlink", description="mlink関連のコマンドです。")
 
-  @app_commands.command(name="new", description="2つのアカウントのメンションを紐づけます。")
-  @app_commands.rename(acc1="アカウント1", acc2="アカウント2")
-  async def new(self, inter: Interaction, acc1: discord.Member,
-                acc2: discord.Member):
+  @app_commands.command(name="new", description="現在のアカウントともう一つのアカウントのメンションを紐づけます。")
+  @app_commands.rename(acc="アカウント")
+  async def new(self, inter: Interaction, acc1: discord.Member):
     global links
 
-    if [acc1.mention, acc2.mention] in links or [acc2.mention, acc1.mention
-                                                 ] in links:
+    acc2 = inter.user.mention
+    if [acc1.mention, acc2] in links or [acc2, acc1.mention] in links:
       await inter.response.send_message(f"すでにリンクされています。", ephemeral=True)
     else:
-      links.append([acc1.mention, acc2.mention])
+      links.append([acc1.mention, acc2])
       link_dump(links)
-      await inter.response.send_message(
-          f"{acc1.mention}と{acc2.mention}のメンションを紐づけました。", ephemeral=True)
+      await inter.response.send_message(f"現在のアカウントと{acc1.mention}のメンションを紐づけました。", ephemeral=True)
 
-  @app_commands.command(name="delete", description="紐づけ情報を削除します。(入力は順不同)")
-  @app_commands.rename(acc1="紐づけたアカウント1", acc2="紐づけたアカウント2")
-  async def delete(self, inter: Interaction, acc1: discord.Member,
-                   acc2: discord.Member):
+  @app_commands.command(name="delete", description="現在のアカウントともう一つのアカウントの紐づけを解除します。")
+  @app_commands.rename(acc1="紐づけたアカウント")
+  async def delete(self, inter: Interaction, acc1: discord.Member):
     global links
 
-    if [acc1.mention, acc2.mention] in links or [acc2.mention, acc1.mention
-                                                 ] in links:
+    acc2 = inter.user.mention
+    if [acc1.mention, acc2] in links or [acc2, acc1.mention] in links:
       try:
-        del links[links.index([acc1.mention, acc2.mention])]
+        del links[links.index([acc1.mention, acc2])]
       except:
-        del links[links.index([acc2.mention, acc1.mention])]
+        del links[links.index([acc2, acc1.mention])]
       link_dump(links)
-      await inter.response.send_message(
-          f"{acc1.mention}と{acc2.mention}の紐づけを解除しました。", ephemeral=True)
+      await inter.response.send_message(f"現在のアカウントと{acc1.mention}の紐づけを解除しました。", ephemeral=True)
     else:
-      await inter.response.send_message(
-          f"{acc1.mention}と{acc2.mention}の紐づけ情報が見つかりませんでした。", ephemeral=True)
+      await inter.response.send_message(f"現在のアカウントと{acc1.mention}の紐づけ情報が見つかりませんでした。", ephemeral=True)
+
+  # @app_commands.command(name="setup", description="このチャンネルにアカウントリンクのボタンを作成します。")
+  # async def setup(self, inter: Interaction):
 
 #クライアントクラス
 class Test(Client):
@@ -200,9 +194,7 @@ class SendChannelView(ui.View):
     self.send_embed = embed
     self.send_url_view = url_view
 
-  @ui.select(cls=ui.ChannelSelect,
-             placeholder="チャンネルを選択",
-             channel_types=[ChannelType.text])
+  @ui.select(cls=ui.ChannelSelect, placeholder="チャンネルを選択", channel_types=[ChannelType.text])
   async def set_channel(self, inter: Interaction, select: ui.ChannelSelect):
     self.send_button.disabled = False
     self.send_button.style = ButtonStyle.green
@@ -230,9 +222,8 @@ base_name = name_load() or {}
 
 #pingコマンド
 @client.tree.command(name="ping", description="動作確認用")
-async def ping(inter: Interaction, ):
-  await inter.response.send_message(f"pong({round(client.latency * 1000)}ms)",
-                                    ephemeral=True)
+async def ping(inter: Interaction):
+  await inter.response.send_message(f"pong({round(client.latency * 1000)}ms)", ephemeral=True)
 
 #イベント発生時の処理
 @client.event
@@ -246,13 +237,13 @@ async def on_interaction(inter: discord.Interaction):
 async def on_button_click(inter: discord.Interaction):
   custom_id = inter.data["custom_id"]
   hands = {"rock": [1, "✊"], "scissor": [2, "✌"], "paper": [3, "✋"]}
-  result = [["勝ち", "green"], ["引き分け", "lighter_grey"], ["負け", "red"]]
-  cpu_num = randint(1, 3)
-  cpu_hand = [k for k, v in hands.items() if v[0] == cpu_num]
-  result_num = (hands[custom_id][0] - hands[cpu_hand[0]][0] + 4) % 3
   user_id = inter.user.id
 
   if custom_id in hands:
+    result = [["勝ち", "green"], ["引き分け", "lighter_grey"], ["負け", "red"]]
+    cpu_num = randint(1, 3)
+    cpu_hand = [k for k, v in hands.items() if v[0] == cpu_num]
+    result_num = (hands[custom_id][0] - hands[cpu_hand[0]][0] + 4) % 3
     embed = discord.Embed(
         title="じゃんけん結果",
         description=
@@ -263,6 +254,8 @@ async def on_button_click(inter: discord.Interaction):
     else:
       embed.add_field(name="", value=f"<@{user_id}>の{result[result_num][0]}‼️")
     await inter.response.send_message(embed=embed)
+  elif custom_id == "link":
+    await inter.response.send_message("リンクしたいアカウントをこのチャンネルにメンションしてください。", ephemeral=True)
 
 #jnknコマンド
 @client.tree.command(name="jnkn", description="じゃんけんしろ")
@@ -301,9 +294,7 @@ async def message_forward(inter: Interaction, message: Message):
     else:
       attch_desc.append(f"📄{attch.filename}")
   if len(attch_desc) > 0:
-    embed.add_field(name="",
-                    value=f"---添付ファイル{len(attch_desc)}件---",
-                    inline=False)
+    embed.add_field(name="", value=f"---添付ファイル{len(attch_desc)}件---", inline=False)
     for i in range(len(attch_desc)):
       embed.add_field(name="", value=attch_desc[i], inline=False)
 
@@ -324,5 +315,50 @@ async def message_forward(inter: Interaction, message: Message):
   await inter.response.send_message("どこへ転送しますか？",
                                     view=send_channel_view,
                                     ephemeral=True)
+  
+#valomapコマンド
+@client.tree.command(name="map", description="VALORANTのマップをランダムにピックします。")
+async def valomap(inter: Interaction):
+  map_list = ["サンセット", "ロータス", "パール", "フラクチャー", "ブリーズ", "アイスボックス", "バインド", "ヘイブン", "スプリット", "アセント"]
+  n = randint(0, 9)
+  await inter.response.send_message(f"{map_list[n]}")
+
+#valocharaコマンド
+@client.tree.command(name="chara", description="VALORANTのキャラをランダムにピックします。(イメージ画像：白椅ぬゐ @VshiroinuV)")
+async def valochara(inter: Interaction, player: Optional[Literal[1, 2, 3, 4, 5]], due: Optional[Literal[1, 2, 3, 4, 5]], ini: Optional[Literal[1, 2, 3, 4, 5]], con: Optional[Literal[1, 2, 3, 4, 5]], sen: Optional[Literal[1, 2, 3, 4, 5]]):
+  chara_due = [["ジェット", "https://i.imgur.com/1smAXBm.png"], ["レイズ", "https://i.imgur.com/OAjVIU7.png"], ["フェニックス", "https://i.imgur.com/kamtBa6.png"], ["レイナ", "https://i.imgur.com/5CnffnS.png"], ["ヨル", "https://i.imgur.com/5A1tfFm.png"], ["ネオン", "https://i.imgur.com/NuTAgT5.png"], ["アイソ", "https://i.imgur.com/WX5Q9hu.png"]]
+  chara_ini = [["ブリーチ", "https://i.imgur.com/r7ztSJy.png"], ["ソーヴァ", "https://i.imgur.com/0Ypzk3f.png"], ["スカイ", "https://i.imgur.com/HJXQQFh.png"], ["KAY/O", "https://i.imgur.com/Jc5eyrp.png"], ["フェイド", "https://i.imgur.com/RiZ4ARQ.png"], ["ゲッコー", "https://i.imgur.com/FzuVP3t.png"]]
+  chara_con = [["オーメン", "https://i.imgur.com/CX8KJx2.png"], ["ブリムストーン", "https://i.imgur.com/S0NbBGB.png"], ["ヴァイパー", "https://i.imgur.com/1oq94o0.png"], ["アストラ", "https://i.imgur.com/OQbs4Ja.png"], ["ハーバー", "https://i.imgur.com/iujL1nN.png"], ["クローヴ", "https://i.imgur.com/052XxDn.png"]]
+  chara_sen = [["セージ", "https://i.imgur.com/AhtIQ5M.png"], ["サイファー", "https://i.imgur.com/uTxNMz5.png"], ["キルジョイ", "https://i.imgur.com/Ou2fJhk.png"], ["チェンバー", "https://i.imgur.com/UqUhz15.png"], ["デッドロック", "https://i.imgur.com/dETijfG.png"]]
+  pick = []
+  message = ""
+  if player < due + ini + con + sen:
+    await inter.response.send_message("ロール指定数の合計がプレイヤー数を超えています。", ephemeral=True)
+  else:
+    if due:
+      n = sample(range(len(chara_due)), due)
+      for i in range(due):
+        pick.append(chara_due[n[i]])
+      message += f"デュエリスト{due}人\n"
+    elif ini:
+      n = sample(range(len(chara_ini)), ini)
+      for i in range(ini):
+        pick.append(chara_ini[n[i]])
+      message += f"イニシエーター{ini}人\n"
+    elif con:
+      n = sample(range(len(chara_con)), con)
+      for i in range(con):
+        pick.append(chara_con[n[i]])
+      message += f"コントローラー{con}人\n"
+    elif sen:
+      n = sample(range(len(chara_sen)), sen)
+      for i in range(sen):
+        pick.append(chara_sen[n[i]])
+      message += f"センチネル{sen}人\n"
+    for i in range(len(pick)):
+      message += f"{pick[i][1]}"
+    for i in range(len(pick)):
+      message += f"{pick[i][0]} "
+    await inter.response.send_message(message)
 
 client.run(TOKEN)
