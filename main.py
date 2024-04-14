@@ -161,7 +161,6 @@ class Valo(Group):
     message = ""
     images = []
     role = due+ini+con+sen
-    print(due, ini, con, sen)
 
     if player < role:
       await inter.response.send_message("ロール指定数の合計がプレイヤー数を超えています。", ephemeral=True)
