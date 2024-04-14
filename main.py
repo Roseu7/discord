@@ -132,30 +132,30 @@ class Valo(Group):
   @app_commands.rename(player="人数", due="デュエリスト", ini="イニシエーター", con="コントローラー", sen="センチネル")
   @app_commands.describe(player="ランダムピックする人数を指定してください。", due="デュエリストの人数を指定してください。", ini="イニシエーターの人数を指定してください。", con="コントローラーの人数を指定してください。", sen="センチネルの人数を指定してください。")
   async def valochara(self, inter: Interaction, player: Optional[Literal[1, 2, 3, 4, 5]] = 5, due: Optional[Literal[1, 2, 3, 4, 5]] = 0, ini: Optional[Literal[1, 2, 3, 4, 5]] = 0, con: Optional[Literal[1, 2, 3, 4, 5]] = 0, sen: Optional[Literal[1, 2, 3, 4, 5]] = 0):
-    chara_due = [["ジェット", "png\\valo\\JETT.png"],
-                 ["レイズ", "png\\valo\\RAZE.png"],
-                 ["フェニックス", "png\\valo\\PHOENIX.png"],
-                 ["レイナ", "png\\valo\\RAYNA.png"],
-                 ["ヨル", "png\\valo\\YORU.png"],
-                 ["ネオン", "png\\valo\\NEON.png"],
-                 ["アイソ", "png\\valo\\ISO.png"]]
-    chara_ini = [["ブリーチ", "png\valo\\BREACH.png"],
-                 ["ソーヴァ", "png\\valo\\SOVA.png"],
-                 ["スカイ", "png\\valo\\SKYE.png"],
-                 ["KAY/O", "png\\valo\\KAYO.png"],
-                 ["フェイド", "png\\valo\\FADE.png"],
-                 ["ゲッコー", "png\\valo\\GEKKO.png"]]
-    chara_con = [["オーメン", "png\\valo\\OMEN.png"],
-                 ["ブリムストーン", "png\\valo\\BRIMSTONE.png"],
-                 ["ヴァイパー", "png\\valo\\VIPER.png"],
-                 ["アストラ", "png\\valo\\ASTRA.png"],
-                 ["ハーバー", "png\\valo\\HARBOR.png"],
-                 ["クローヴ", "png\\valo\\CLOVE.png"]]
-    chara_sen = [["セージ", "png\\valo\\SAGE.png"],
-                 ["サイファー", "png\\valo\\CYPHER.png"],
-                 ["キルジョイ", "png\\valo\\KILLJOY.png"],
-                 ["チェンバー", "png\\valo\\CHAMBER.png"],
-                 ["デッドロック", "png\\valo\\DEADLOCK.png"]]
+    chara_due = [["ジェット", os.path.join(current_dir, "png", "valo", "JETT.png")],
+                 ["レイズ", os.path.join(current_dir, "png", "valo", "RAZE.png")],
+                 ["フェニックス", os.path.join(current_dir, "png", "valo", "PHOENIX.png")],
+                 ["レイナ", os.path.join(current_dir, "png", "valo", "RAYNA.png")],
+                 ["ヨル", os.path.join(current_dir, "png", "valo", "YORU.png")],
+                 ["ネオン", os.path.join(current_dir, "png", "valo", "NEON.png")],
+                 ["アイソ", os.path.join(current_dir, "png", "valo", "ISO.png")]]
+    chara_ini = [["ブリーチ", os.path.join(current_dir, "png", "valo", "BREACH.png")],
+                 ["ソーヴァ", os.path.join(current_dir, "png", "valo", "SOVA.png")],
+                 ["スカイ", os.path.join(current_dir, "png", "valo", "SKYE.png")],
+                 ["KAY/O", os.path.join(current_dir, "png", "valo", "KAYO.png")],
+                 ["フェイド", os.path.join(current_dir, "png", "valo", "FADE.png")],
+                 ["ゲッコー", os.path.join(current_dir, "png", "valo", "GEKKO.png")]]
+    chara_con = [["オーメン", os.path.join(current_dir, "png", "valo", "OMEN.png")],
+                 ["ブリムストーン", os.path.join(current_dir, "png", "valo", "BRIMSTONE.png")],
+                 ["ヴァイパー", os.path.join(current_dir, "png", "valo", "VIPER.png")],
+                 ["アストラ", os.path.join(current_dir, "png", "valo", "ASTRA.png")],
+                 ["ハーバー", os.path.join(current_dir, "png", "valo", "HARBOR.png")],
+                 ["クローヴ", os.path.join(current_dir, "png", "valo", "CLOVE.png")]]
+    chara_sen = [["セージ", os.path.join(current_dir, "png", "valo", "SAGE.png")],
+                 ["サイファー", os.path.join(current_dir, "png", "valo", "CYPHER.png")],
+                 ["キルジョイ", os.path.join(current_dir, "png", "valo", "KILLJOY.png")],
+                 ["チェンバー", os.path.join(current_dir, "png", "valo", "CHAMBER.png")],
+                 ["デッドロック", os.path.join(current_dir, "png", "valo", "DEADLOCK.png")]]
     chara_all = chara_due+chara_ini+chara_con+chara_sen
     pick = []
     message = ""
