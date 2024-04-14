@@ -114,16 +114,16 @@ class Valo(Group):
   #valomapコマンド
   @app_commands.command(name="map", description="VALORANTのマップをランダムにピックします。")
   async def valomap(self, inter: Interaction):
-    map_list = [["サンセット", "png\\valo\\sunset.png"],
-                ["ロータス", "png\\valo\\lotus.png"],
-                ["パール", "png\\valo\\pearl.png"],
-                ["フラクチャー", "png\\valo\\fracture.png"],
-                ["ブリーズ", "png\\valo\\breeze.png"],
-                ["アイスボックス", "png\\valo\\icebox.png"],
-                ["バインド", "png\\valo\\bind.png"],
-                ["ヘイブン", "png\\valo\\haven.png"],
-                ["スプリット", "png\\valo\\split.png"],
-                ["アセント", "png\\valo\\ascent.png"]]
+    map_list = [["サンセット", os.path.join(current_dir, "png", "valo", "sunset.png")],
+                ["ロータス", os.path.join(current_dir, "png", "valo", "lotus.png")],
+                ["パール", os.path.join(current_dir, "png", "valo", "pearl.png")],
+                ["フラクチャー", os.path.join(current_dir, "png", "valo", "fracture.png")],
+                ["ブリーズ", os.path.join(current_dir, "png", "valo", "breeze.png")],
+                ["アイスボックス", os.path.join(current_dir, "png", "valo", "icebox.png")],
+                ["バインド", os.path.join(current_dir, "png", "valo", "bind.png")],
+                ["ヘイブン", os.path.join(current_dir, "png", "valo", "haven.png")],
+                ["スプリット", os.path.join(current_dir, "png", "valo", "split.png")],
+                ["アセント", os.path.join(current_dir, "png", "valo", "ascent.png")]]
     n = randint(0, 9)
     await inter.response.send_message(f"{map_list[n][0]}", file=map_list[n][1])
 
@@ -292,6 +292,7 @@ client = Test(intents=intents)
 links = link_load() or []
 osu_link = osu_load() or {}
 base_name = name_load() or {}
+current_dir = os.path.dirname(os.path.abspath(__file__))
 
 #pingコマンド
 @client.tree.command(name="ping", description="動作確認用")
