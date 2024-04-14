@@ -158,7 +158,6 @@ class Valo(Group):
         message += f"{pick[i][0]} "
       await inter.response.send_message(message)
 
-
 #クライアントクラス
 class Test(Client):
 
@@ -171,6 +170,7 @@ class Test(Client):
   async def setup_hook(self):
     self.tree.add_command(OsuGroup())
     self.tree.add_command(MLink())
+    self.tree.add_command(Valo())
     commands = await self.tree.sync()
     pprint.pprint(commands)
 
