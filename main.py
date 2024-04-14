@@ -176,7 +176,7 @@ class Valo(Group):
         message += f"ランダム{n}人\n"
       for i in range(len(pick)):
         message += f"{pick[i][0]} "
-        images.appned(pick[i][1])
+        images.append(pick[i][1])
       await inter.response.send_message(message, files=images)
 
 #クライアントクラス
