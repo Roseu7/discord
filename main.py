@@ -114,16 +114,16 @@ class Valo(Group):
   #valomapコマンド
   @app_commands.command(name="map", description="VALORANTのマップをランダムにピックします。")
   async def valomap(self, inter: Interaction):
-    map_list = [["サンセット", "png\valo\sunset.png"],
-                ["ロータス", "png\valo\lotus.png"],
-                ["パール", "png\valo\pearl.png"],
-                ["フラクチャー", "png\valo\fracture.png"],
-                ["ブリーズ", "png\valo\breeze.png"],
-                ["アイスボックス", "png\valo\icebox.png"],
-                ["バインド", "png\valo\bind.png"],
-                ["ヘイブン", "png\valo\haven.png"],
-                ["スプリット", "png\valo\split.png"],
-                ["アセント", "png\valo\ascent.png"]]
+    map_list = [["サンセット", r"png\valo\sunset.png"],
+                ["ロータス", r"png\valo\lotus.png"],
+                ["パール", r"png\valo\pearl.png"],
+                ["フラクチャー", r"png\valo\fracture.png"],
+                ["ブリーズ", r"png\valo\breeze.png"],
+                ["アイスボックス", r"png\valo\icebox.png"],
+                ["バインド", r"png\valo\bind.png"],
+                ["ヘイブン", r"png\valo\haven.png"],
+                ["スプリット", r"png\valo\split.png"],
+                ["アセント", r"png\valo\ascent.png"]]
     n = randint(0, 9)
     await inter.response.send_message(f"{map_list[n][0]}", file=map_list[n][1])
 
@@ -132,10 +132,10 @@ class Valo(Group):
   @app_commands.rename(player="人数", due="デュエリスト", ini="イニシエーター", con="コントローラー", sen="センチネル")
   @app_commands.describe(player="ランダムピックする人数を指定してください。", due="デュエリストの人数を指定してください。", ini="イニシエーターの人数を指定してください。", con="コントローラーの人数を指定してください。", sen="センチネルの人数を指定してください。")
   async def valochara(self, inter: Interaction, player: Optional[Literal[1, 2, 3, 4, 5]] = 5, due: Optional[Literal[1, 2, 3, 4, 5]] = 0, ini: Optional[Literal[1, 2, 3, 4, 5]] = 0, con: Optional[Literal[1, 2, 3, 4, 5]] = 0, sen: Optional[Literal[1, 2, 3, 4, 5]] = 0):
-    chara_due = [["ジェット", "png\valo\JETT.png"], ["レイズ", "png\valo\RAZE.png"], ["フェニックス", "png\valo\PHOENIX.png"], ["レイナ", "png\valo\RAYNA.png"], ["ヨル", "png\valo\YORU.png"], ["ネオン", "png\valo\NEON.png"], ["アイソ", "png\valo\ISO.png"]]
-    chara_ini = [["ブリーチ", "png\valo\BREACH.png"], ["ソーヴァ", "png\valo\SOVA.png"], ["スカイ", "png\valo\SKYE.png"], ["KAY/O", "png\valo\KAYO.png"], ["フェイド", "png\valo\FADE.png"], ["ゲッコー", "png\valo\GEKKO.png"]]
-    chara_con = [["オーメン", "png\valo\OMEN.png"], ["ブリムストーン", "png\valo\BRIMSTONE.png"], ["ヴァイパー", "png\valo\VIPER.png"], ["アストラ", "png\valo\ASTRA.png"], ["ハーバー", "png\valo\HARBOR.png"], ["クローヴ", "png\valo\CLOVE.png"]]
-    chara_sen = [["セージ", "png\valo\SAGE.png"], ["サイファー", "png\valo\CYPHER.png"], ["キルジョイ", "png\valo\KILLJOY.png"], ["チェンバー", "png\valo\CHAMBER.png"], ["デッドロック", "png\valo\DEADLOCK.png"]]
+    chara_due = [["ジェット", r"png\valo\JETT.png"], ["レイズ", r"png\valo\RAZE.png"], ["フェニックス", r"png\valo\PHOENIX.png"], ["レイナ", r"png\valo\RAYNA.png"], ["ヨル", r"png\valo\YORU.png"], ["ネオン", r"png\valo\NEON.png"], ["アイソ", r"png\valo\ISO.png"]]
+    chara_ini = [["ブリーチ", r"png\valo\BREACH.png"], ["ソーヴァ", r"png\valo\SOVA.png"], ["スカイ", r"png\valo\SKYE.png"], ["KAY/O", r"png\valo\KAYO.png"], ["フェイド", r"png\valo\FADE.png"], ["ゲッコー", r"png\valo\GEKKO.png"]]
+    chara_con = [["オーメン", r"png\valo\OMEN.png"], ["ブリムストーン", r"png\valo\BRIMSTONE.png"], ["ヴァイパー", r"png\valo\VIPER.png"], ["アストラ", r"png\valo\ASTRA.png"], ["ハーバー", r"png\valo\HARBOR.png"], ["クローヴ", r"png\valo\CLOVE.png"]]
+    chara_sen = [["セージ", r"png\valo\SAGE.png"], ["サイファー", r"png\valo\CYPHER.png"], ["キルジョイ", r"png\valo\KILLJOY.png"], ["チェンバー", r"png\valo\CHAMBER.png"], ["デッドロック", r"png\valo\DEADLOCK.png"]]
     chara_all = chara_due+chara_ini+chara_con+chara_sen
     pick = []
     message = ""
