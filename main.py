@@ -4,7 +4,7 @@ from typing import Optional, Literal
 from random import randint, sample
 
 import discord
-from discord import Intents, Client, Interaction, Message, app_commands, Embed, ui, ButtonStyle, ChannelType
+from discord import Intents, Client, Interaction, Message, app_commands, Embed, ui, ButtonStyle, ChannelType, File
 from discord.app_commands import CommandTree, Group
 from discord.ext import tasks
 
@@ -125,17 +125,37 @@ class Valo(Group):
                 ["スプリット", os.path.join(current_dir, "png", "valo", "split.png")],
                 ["アセント", os.path.join(current_dir, "png", "valo", "ascent.png")]]
     n = randint(0, 9)
-    await inter.response.send_message(f"{map_list[n][0]}", file=map_list[n][1])
+    await inter.response.send_message(f"{map_list[n][0]}", file=File(map_list[n][1]))
 
   #valocharaコマンド
   @app_commands.command(name="chara", description="VALORANTのキャラをランダムにピックします。(イメージ画像：白椅ぬゐ @VshiroinuV)")
   @app_commands.rename(player="人数", due="デュエリスト", ini="イニシエーター", con="コントローラー", sen="センチネル")
   @app_commands.describe(player="ランダムピックする人数を指定してください。", due="デュエリストの人数を指定してください。", ini="イニシエーターの人数を指定してください。", con="コントローラーの人数を指定してください。", sen="センチネルの人数を指定してください。")
   async def valochara(self, inter: Interaction, player: Optional[Literal[1, 2, 3, 4, 5]] = 5, due: Optional[Literal[1, 2, 3, 4, 5]] = 0, ini: Optional[Literal[1, 2, 3, 4, 5]] = 0, con: Optional[Literal[1, 2, 3, 4, 5]] = 0, sen: Optional[Literal[1, 2, 3, 4, 5]] = 0):
-    chara_due = [["ジェット", "png\\valo\\JETT.png"], ["レイズ", "png\\valo\\RAZE.png"], ["フェニックス", "png\\valo\\PHOENIX.png"], ["レイナ", "png\\valo\\RAYNA.png"], ["ヨル", "png\\valo\\YORU.png"], ["ネオン", "png\\valo\\NEON.png"], ["アイソ", "png\\valo\\ISO.png"]]
-    chara_ini = [["ブリーチ", "png\valo\\BREACH.png"], ["ソーヴァ", "png\\valo\\SOVA.png"], ["スカイ", "png\\valo\\SKYE.png"], ["KAY/O", "png\\valo\\KAYO.png"], ["フェイド", "png\\valo\\FADE.png"], ["ゲッコー", "png\\valo\\GEKKO.png"]]
-    chara_con = [["オーメン", "png\\valo\\OMEN.png"], ["ブリムストーン", "png\\valo\\BRIMSTONE.png"], ["ヴァイパー", "png\\valo\\VIPER.png"], ["アストラ", "png\\valo\\ASTRA.png"], ["ハーバー", "png\\valo\\HARBOR.png"], ["クローヴ", "png\\valo\\CLOVE.png"]]
-    chara_sen = [["セージ", "png\\valo\\SAGE.png"], ["サイファー", "png\\valo\\CYPHER.png"], ["キルジョイ", "png\\valo\\KILLJOY.png"], ["チェンバー", "png\\valo\\CHAMBER.png"], ["デッドロック", "png\\valo\\DEADLOCK.png"]]
+    chara_due = [["ジェット", "png\\valo\\JETT.png"],
+                 ["レイズ", "png\\valo\\RAZE.png"],
+                 ["フェニックス", "png\\valo\\PHOENIX.png"],
+                 ["レイナ", "png\\valo\\RAYNA.png"],
+                 ["ヨル", "png\\valo\\YORU.png"],
+                 ["ネオン", "png\\valo\\NEON.png"],
+                 ["アイソ", "png\\valo\\ISO.png"]]
+    chara_ini = [["ブリーチ", "png\valo\\BREACH.png"],
+                 ["ソーヴァ", "png\\valo\\SOVA.png"],
+                 ["スカイ", "png\\valo\\SKYE.png"],
+                 ["KAY/O", "png\\valo\\KAYO.png"],
+                 ["フェイド", "png\\valo\\FADE.png"],
+                 ["ゲッコー", "png\\valo\\GEKKO.png"]]
+    chara_con = [["オーメン", "png\\valo\\OMEN.png"],
+                 ["ブリムストーン", "png\\valo\\BRIMSTONE.png"],
+                 ["ヴァイパー", "png\\valo\\VIPER.png"],
+                 ["アストラ", "png\\valo\\ASTRA.png"],
+                 ["ハーバー", "png\\valo\\HARBOR.png"],
+                 ["クローヴ", "png\\valo\\CLOVE.png"]]
+    chara_sen = [["セージ", "png\\valo\\SAGE.png"],
+                 ["サイファー", "png\\valo\\CYPHER.png"],
+                 ["キルジョイ", "png\\valo\\KILLJOY.png"],
+                 ["チェンバー", "png\\valo\\CHAMBER.png"],
+                 ["デッドロック", "png\\valo\\DEADLOCK.png"]]
     chara_all = chara_due+chara_ini+chara_con+chara_sen
     pick = []
     message = ""
@@ -176,7 +196,7 @@ class Valo(Group):
         message += f"ランダム{n}人\n"
       for i in range(len(pick)):
         message += f"{pick[i][0]} "
-        images.append(pick[i][1])
+        images.append(File(pick[i][1]))
       await inter.response.send_message(message, files=images)
 
 #クライアントクラス
