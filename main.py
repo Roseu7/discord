@@ -11,6 +11,7 @@ from discord.ext import tasks
 from modules.pickleDef import link_dump, link_load, osu_dump, osu_load, name_dump, name_load
 from modules.related_mention import find_related_user
 from modules.osuDef import osu_id_convert, osu_now_pp, osu_name_convert
+from modules.mcrconDef import mc_getlist
 
 #osuコマンド関連
 class OsuGroup(Group):
@@ -410,4 +411,9 @@ async def message_forward(inter: Interaction, message: Message):
                                     view=send_channel_view,
                                     ephemeral=True)
   
+@client.tree.command(name="mclist", description="マイクラの鯖が立っている場合のみ、参加している人を表示します。")
+async def mclist(inter: Interaction):
+  res = mc_getlist()
+  await inter.response.send_message(res, ephemeral=True)
+
 client.run(TOKEN)
