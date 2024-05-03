@@ -9,5 +9,5 @@ SERVER_PORT = int(os.getenv("SERVER_PORT"))
 
 def mc_getlist():
     with MCRcon(SERVER_ADDRESS, SERVER_PASS, SERVER_PORT) as mcr:
-        log = mcr.command(list)
+        log = mcr.command("list")
         return log
