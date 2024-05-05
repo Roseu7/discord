@@ -284,7 +284,7 @@ class Test(Client):
     try:
       res = mc_getlist()
       p = re.search(r'\d+', res)
-      await client.change_presence(activity=discord.Game(name=f"{p.groups()}人がマイクラ"))
+      await client.change_presence(activity=discord.Game(name=f"{p.group()}人がマイクラ"))
     except:
       await client.change_presence(activity=discord.Activity(name="テスト", type=5))
     
