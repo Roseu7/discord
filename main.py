@@ -1,5 +1,6 @@
 import os
 import pprint
+import re
 from typing import Optional, Literal
 from random import randint, sample
 
@@ -232,7 +233,7 @@ class Test(Client):
     print(f"{base_name=}")
     await client.user.edit(username="なんやかんやbot")
     #await client.change_presence(activity=discord.CustomActivity(name="テスト中", emoji="🤖"))
-    await client.change_presence(activity=discord.Activity(name="テスト", type=5))
+    #await client.change_presence(activity=discord.Activity(name="テスト", type=5))
     client.schedule.start()
 
   #メッセージ受信時
@@ -244,7 +245,7 @@ class Test(Client):
       if mentioned_user:
         await message.reply(f"{' '.join(mentioned_user)}")
 
-  @tasks.loop(seconds=600)
+  @tasks.loop(seconds=300)
   async def schedule(self):
     global base_name
     for guild in client.guilds:
@@ -280,6 +281,13 @@ class Test(Client):
               print(f"{guild}の{member}のニックネームに変更なし")
           except:
             print(f"{guild}の{member}のニックネームを変更できず")
+    try:
+      res = mc_getlist()
+      p = re.search(r'\d+', res)
+      await client.change_presence(activity=discord.Game(name=f"{p}人がマイクラ"))
+    except:
+      await client.change_presence(activity=discord.Activity(name="テスト", type=5))
+    
 
 class SendChannelView(ui.View):
 
@@ -413,7 +421,10 @@ async def message_forward(inter: Interaction, message: Message):
   
 @client.tree.command(name="mclist", description="マイクラの鯖が立っている場合のみ、参加している人を表示します。")
 async def mclist(inter: Interaction):
-  res = mc_getlist()
+  try:
+    res = mc_getlist()
+  except:
+    res = "エラーが発生しました。サーバーが開いていない可能性があります。"
   await inter.response.send_message(res, ephemeral=True)
 
 client.run(TOKEN)
