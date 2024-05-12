@@ -9,7 +9,7 @@ from discord import Intents, Client, Interaction, Message, app_commands, Embed, 
 from discord.app_commands import CommandTree, Group
 from discord.ext import tasks
 
-from modules.pickleDef import link_dump, link_load, osu_dump, osu_load, name_dump, name_load
+from modules.pickleDef import link_dump, link_load, osu_dump, osu_load, name_dump, name_load, other_dump, other_load
 from modules.related_mention import find_related_user
 from modules.osuDef import osu_id_convert, osu_now_pp, osu_name_convert
 from modules.mcrconDef import mc_getlist
@@ -72,7 +72,7 @@ class OsuGroup(Group):
       await inter.response.send_message(
           f"{inter.user.mention}に紐づけられているosu情報を削除しました。", ephemeral=True)
 
-class MLink(Group):
+class MLinkGroup(Group):
 
   def __init__(self):
     super().__init__(name="mlink", description="mlink関連のコマンドです。")
@@ -109,7 +109,7 @@ class MLink(Group):
   # @app_commands.command(name="setup", description="このチャンネルにアカウントリンクのボタンを作成します。")
   # async def setup(self, inter: Interaction):
 
-class Valo(Group):
+class ValoGroup(Group):
   def __init__(self):
     super().__init__(name="valo", description="VALORANT関連のコマンドです。")
 
@@ -201,6 +201,36 @@ class Valo(Group):
         images.append(File(pick[i][1]))
       await inter.response.send_message(message, files=images)
 
+class McGroup(Group):
+  def __init__(self):
+    super().__init__(name="mc", description="マインクラフト関連のコマンドです。")
+
+  @app_commands.command(name="mods", description="現在の鯖への接続に必要なmodファイルのダウンロードリンクを表示します。")
+  @app_commands.rename(ep="他人にも表示")
+  @app_commands.describe(ep="他の人にこのメッセージを表示するか設定できます。")
+  async def mods(self, inter: Interaction, ep: Optional[Literal["はい", "いいえ"]]):
+    if ep == "はい":
+      ep = False
+    else:
+      ep = True
+    await inter.response.send_message(f"[ここをクリックしてダウンロードページを表示]({other_data["mods_url"]})", ephemeral=ep)
+
+  @app_commands.command(name="list", description="マイクラの鯖が立っている場合のみ、参加している人を表示します。")
+  async def list(self, inter: Interaction):
+    try:
+      res = mc_getlist()
+    except:
+      res = "エラーが発生しました。サーバーが開いていない可能性があります。"
+    await inter.response.send_message(res, ephemeral=True)
+
+  @app_commands.command(name="mods edit", description="modsコマンド内容を編集します。(現在**ろせ**のみ可能)", )
+  @app_commands.rename(url="配布用URL")
+  @app_commands.describe(url="modsファイル配布用のURLを指定してください。")
+  async def mods_edit(self, inter: Interaction, url: str):
+    other_data["mods_url"] = url
+    other_dump(other_data)
+    await inter.response.send_message("URLを変更しました。", ephemeral=True)
+
 #クライアントクラス
 class Test(Client):
 
@@ -212,8 +242,9 @@ class Test(Client):
   #同期
   async def setup_hook(self):
     self.tree.add_command(OsuGroup())
-    self.tree.add_command(MLink())
-    self.tree.add_command(Valo())
+    self.tree.add_command(MLinkGroup())
+    self.tree.add_command(ValoGroup())
+    self.tree.add_command(McGroup())
     commands = await self.tree.sync()
     pprint.pprint(commands)
 
@@ -288,7 +319,6 @@ class Test(Client):
     except:
       await client.change_presence(activity=discord.Activity(name="テスト", type=5))
     
-
 class SendChannelView(ui.View):
 
   def __init__(self, embed: Embed, url_view: ui.View):
@@ -321,6 +351,7 @@ client = Test(intents=intents)
 links = link_load() or []
 osu_link = osu_load() or {}
 base_name = name_load() or {}
+other_data = other_load() or {}
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
 #pingコマンド
@@ -418,13 +449,5 @@ async def message_forward(inter: Interaction, message: Message):
   await inter.response.send_message("どこへ転送しますか？",
                                     view=send_channel_view,
                                     ephemeral=True)
-  
-@client.tree.command(name="mclist", description="マイクラの鯖が立っている場合のみ、参加している人を表示します。")
-async def mclist(inter: Interaction):
-  try:
-    res = mc_getlist()
-  except:
-    res = "エラーが発生しました。サーバーが開いていない可能性があります。"
-  await inter.response.send_message(res, ephemeral=True)
 
 client.run(TOKEN)
