@@ -223,13 +223,14 @@ class McGroup(Group):
       res = "エラーが発生しました。サーバーが開いていない可能性があります。"
     await inter.response.send_message(res, ephemeral=True)
 
-  @app_commands.command(name="mods edit", description="modsコマンド内容を編集します。(現在**ろせ**のみ可能)", )
+  @app_commands.command(name="mods-edit", description="modsコマンド内容を編集します。(現在**ろせ**のみ可能)", )
   @app_commands.rename(url="配布用URL")
   @app_commands.describe(url="modsファイル配布用のURLを指定してください。")
   async def mods_edit(self, inter: Interaction, url: str):
-    other_data["mods_url"] = url
-    other_dump(other_data)
-    await inter.response.send_message("URLを変更しました。", ephemeral=True)
+    if inter.user.id == 292667734573973505:
+      other_data["mods_url"] = url
+      other_dump(other_data)
+      await inter.response.send_message("URLを変更しました。", ephemeral=True)
 
 #クライアントクラス
 class Test(Client):
