@@ -226,7 +226,7 @@ class McGroup(Group):
   @app_commands.command(name="edit", description="modsコマンド内容を編集します。(現在ろせのみ可能)")
   @app_commands.rename(url="配布用URL")
   @app_commands.describe(url="modsファイル配布用のURLを指定してください。")
-  async def edit(self, inter: Interaction, url):
+  async def edit(self, inter: Interaction, url: str):
     if inter.user.id == 292667734573973505:
       other_data["mods_url"] = url
       other_dump(other_data)
