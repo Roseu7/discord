@@ -220,8 +220,9 @@ class McGroup(Group):
   @app_commands.command(name="list", description="マイクラの鯖が立っている場合のみ、参加している人を表示します。")
   async def list(self, inter: Interaction):
     try:
+      loop = asyncio.get_event_loop()
       with ThreadPoolExecutor() as pool:
-        res = await asyncio.get_running_loop().run_in_executor(pool, mc_getlist)
+        res = await loop.run_in_executor(pool, mc_getlist)
     except Exception as e:
       print(f"Error occurred: {e}")
       res = "エラーが発生しました。サーバーが開いていない可能性があります。"
