@@ -1,3 +1,5 @@
+import asyncio
+from concurrent.futures import ThreadPoolExecutor
 import os
 import pprint
 import re
@@ -218,8 +220,10 @@ class McGroup(Group):
   @app_commands.command(name="list", description="マイクラの鯖が立っている場合のみ、参加している人を表示します。")
   async def list(self, inter: Interaction):
     try:
-      res = mc_getlist()
-    except:
+      with ThreadPoolExecutor() as pool:
+        res = await asyncio.get_running_loop().run_in_executor(pool, mc_getlist)
+    except Exception as e:
+      print(f"Error occurred: {e}")
       res = "エラーが発生しました。サーバーが開いていない可能性があります。"
     await inter.response.send_message(res, ephemeral=True)
 
@@ -315,12 +319,14 @@ class Test(Client):
               print(f"{guild}の{member}のニックネームに変更なし")
           except:
             print(f"{guild}の{member}のニックネームを変更できず")
-    try:
-      res = mc_getlist()
-      p = re.search(r'\d+', res)
-      await client.change_presence(activity=discord.Game(name=f"{p.group()}人がマイクラ"))
-    except:
-      await client.change_presence(activity=discord.Activity(name="テスト", type=5))
+    loop = asyncio.get_event_loop()
+    with ThreadPoolExecutor as pool:
+      try:
+        res = await loop.run_in_executor(pool, mc_getlist)
+        p = re.search(r'\d+', res)
+        await client.change_presence(activity=discord.Game(name=f"{p.group()}人がマイクラ"))
+      except Exception as e:
+        await client.change_presence(activity=discord.Activity(name="テスト", type=5))
     
 class SendChannelView(ui.View):
 
