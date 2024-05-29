@@ -254,7 +254,7 @@ class Test(Client):
     commands = await self.tree.sync()
     pprint.pprint(commands)
 
-  @tasks.loop(seconds=300)
+  @tasks.loop(seconds=120)
   async def schedule(self):
     global base_name, task_running
     task_running = True

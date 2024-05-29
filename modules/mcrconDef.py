@@ -1,6 +1,8 @@
 from mcrcon import MCRcon
 import os
 import dotenv
+import socket
+import logging
 
 dotenv.load_dotenv()
 SERVER_ADDRESS = os.getenv("SERVER_ADDRESS")
@@ -12,6 +14,8 @@ def mc_getlist():
         with MCRcon(SERVER_ADDRESS, SERVER_PASS, SERVER_PORT) as mcr:
             log = mcr.command("list")
             return log
+    except socket.timeout:
+        logging.error("接続がタイムアウト")
     except Exception as e:
-        print(e)
+        logging.error(f"エラー発生：{e}")
         return None
