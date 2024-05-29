@@ -8,6 +8,10 @@ SERVER_PASS = os.getenv("SERVER_PASS")
 SERVER_PORT = int(os.getenv("SERVER_PORT"))
 
 def mc_getlist():
-    with MCRcon(SERVER_ADDRESS, SERVER_PASS, SERVER_PORT) as mcr:
-        log = mcr.command("list")
-        return log
+    try:
+        with MCRcon(SERVER_ADDRESS, SERVER_PASS, SERVER_PORT) as mcr:
+            log = mcr.command("list")
+            return log
+    except Exception as e:
+        print(e)
+        return None

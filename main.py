@@ -317,11 +317,12 @@ class Test(Client):
               print(f"{guild}の{member}のニックネームに変更なし")
           except:
             print(f"{guild}の{member}のニックネームを変更できず")
-    try:
-      res = mc_getlist()
+
+    res = mc_getlist()
+    if res != None:
       p = re.search(r'\d+', res)
       await client.change_presence(activity=discord.Game(name=f"{p.group()}人がマイクラ"))
-    except Exception as e:
+    else:
       await client.change_presence(activity=discord.Activity(name="テスト", type=5))
     
 class SendChannelView(ui.View):
