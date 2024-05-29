@@ -300,7 +300,7 @@ class Test(Client):
       logging.error(f"エラー発生：{e}")
       await client.change_presence(activity=discord.Activity(name="テスト", type=5))
     finally:
-      task_running = False
+      self.task_running = False
 
   #起動時
   async def on_ready(self):
@@ -319,7 +319,7 @@ class Test(Client):
     await client.user.edit(username="なんやかんやbot")
     #await client.change_presence(activity=discord.CustomActivity(name="テスト中", emoji="🤖"))
     #await client.change_presence(activity=discord.Activity(name="テスト", type=5))
-    if not task_running:
+    if not self.task_running:
       client.schedule.start()
     else:
       logging.warning("既にスケジュールが実行されています")
