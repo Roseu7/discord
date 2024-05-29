@@ -221,7 +221,7 @@ class McGroup(Group):
   @app_commands.command(name="list", description="マイクラの鯖が立っている場合のみ、参加している人を表示します。")
   async def list(self, inter: Interaction):
     try:
-      res = mc_getlist()
+      res = await mc_getlist()
     except Exception as e:
       res = "エラーが発生しました。サーバーが開いていない可能性があります。"
     await inter.response.send_message(res, ephemeral=True)
@@ -244,6 +244,7 @@ class Test(Client):
   def __init__(self, intents: Intents):
     super().__init__(intents=intents)
     self.tree = CommandTree(self)
+    self.task_running = False
 
   #同期
   async def setup_hook(self):
@@ -360,7 +361,6 @@ TOKEN = os.environ["DISCORD_TOKEN"]
 intents = Intents.default()
 intents.message_content = True
 intents.members = True
-task_running = False
 logging.basicConfig(level=logging.INFO)
 client = Test(intents=intents)
 links = link_load() or []
