@@ -221,7 +221,7 @@ class McGroup(Group):
   @app_commands.command(name="list", description="マイクラの鯖が立っている場合のみ、参加している人を表示します。")
   async def list(self, inter: Interaction):
     try:
-      res = await mc_getlist()
+      res = mc_getlist()
     except Exception as e:
       res = "エラーが発生しました。サーバーが開いていない可能性があります。"
     await inter.response.send_message(res, ephemeral=True)
@@ -292,7 +292,7 @@ class Test(Client):
           except:
             print(f"{guild}の{member}のニックネームを変更できず")
     try:
-      res = await mc_getlist()
+      res = mc_getlist()
       if res:
         p = re.search(r'\d+', res)
         await client.change_presence(activity=discord.Game(name=f"{p.group()}人がマイクラ"))

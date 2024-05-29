@@ -9,13 +9,14 @@ dotenv.load_dotenv()
 SERVER_ADDRESS = os.getenv("SERVER_ADDRESS")
 SERVER_PASS = os.getenv("SERVER_PASS")
 SERVER_PORT = int(os.getenv("SERVER_PORT"))
+mcr = MCRcon(SERVER_ADDRESS, SERVER_PASS)
 
-async def mc_getlist():
+def mc_getlist():
     try:
-        loop = asyncio.get_running_loop()
-        with MCRcon(SERVER_ADDRESS, SERVER_PASS, SERVER_PORT) as mcr:
-            log = await loop.run_in_executor(None, mcr.command, "list")
-            return log
+        mcr.connect()
+        res = mcr.command("list")
+        mcr.disconnect()
+        return res
     except (socket.timeout, asyncio.TimeoutError):
         logging.error("接続がタイムアウト")
         return "接続がタイムアウトしました"
