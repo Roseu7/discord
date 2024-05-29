@@ -1,5 +1,6 @@
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
+import logging
 import os
 import pprint
 import re
@@ -253,37 +254,10 @@ class Test(Client):
     commands = await self.tree.sync()
     pprint.pprint(commands)
 
-  #起動時
-  async def on_ready(self):
-    print("--------------------")
-    print("-----Login Info-----")
-    print("--------------------")
-    print("Name: " + str(client.user))
-    print("ID: " + str(client.user.id))
-    print("Discord ver: " + str(discord.__version__))
-    print("--------------------")
-    print("---Variables Info---")
-    print("--------------------")
-    print(f"{links=}")
-    print(f"{osu_link=}")
-    print(f"{base_name=}")
-    await client.user.edit(username="なんやかんやbot")
-    #await client.change_presence(activity=discord.CustomActivity(name="テスト中", emoji="🤖"))
-    #await client.change_presence(activity=discord.Activity(name="テスト", type=5))
-    client.schedule.start()
-
-  #メッセージ受信時
-  async def on_message(self, message: discord.Message):
-    if message.author.bot:
-      return
-    if message.mentions:
-      mentioned_user = find_related_user(message, links)
-      if mentioned_user:
-        await message.reply(f"{' '.join(mentioned_user)}")
-
   @tasks.loop(seconds=300)
   async def schedule(self):
-    global base_name
+    global base_name, task_running
+    task_running = True
     for guild in client.guilds:
       for member in guild.members:
         if member.id in osu_link:
@@ -297,7 +271,6 @@ class Test(Client):
                 l[1] = new_name
                 base_name[member.id, guild.id] = l
                 name_dump(base_name)
-
           else:
             if (member.id, guild.id) in base_name:
               for k, v in base_name.items():
@@ -317,14 +290,46 @@ class Test(Client):
               print(f"{guild}の{member}のニックネームに変更なし")
           except:
             print(f"{guild}の{member}のニックネームを変更できず")
-
-    res = mc_getlist()
-    if res != None:
-      p = re.search(r'\d+', res)
-      await client.change_presence(activity=discord.Game(name=f"{p.group()}人がマイクラ"))
-    else:
+    try:
+      res = mc_getlist()
+      if res:
+        p = re.search(r'\d+', res)
+        await client.change_presence(activity=discord.Game(name=f"{p.group()}人がマイクラ"))
+    except Exception as e:
       await client.change_presence(activity=discord.Activity(name="テスト", type=5))
-    
+    task_running = False
+
+  #起動時
+  async def on_ready(self):
+    print("--------------------")
+    print("-----Login Info-----")
+    print("--------------------")
+    print("Name: " + str(client.user))
+    print("ID: " + str(client.user.id))
+    print("Discord ver: " + str(discord.__version__))
+    print("--------------------")
+    print("---Variables Info---")
+    print("--------------------")
+    print(f"{links=}")
+    print(f"{osu_link=}")
+    print(f"{base_name=}")
+    await client.user.edit(username="なんやかんやbot")
+    #await client.change_presence(activity=discord.CustomActivity(name="テスト中", emoji="🤖"))
+    #await client.change_presence(activity=discord.Activity(name="テスト", type=5))
+    if not task_running():
+      client.schedule.start()
+    else:
+      logging.warning("既にスケジュールが実行されています")
+
+  #メッセージ受信時
+  async def on_message(self, message: discord.Message):
+    if message.author.bot:
+      return
+    if message.mentions:
+      mentioned_user = find_related_user(message, links)
+      if mentioned_user:
+        await message.reply(f"{' '.join(mentioned_user)}")
+
 class SendChannelView(ui.View):
 
   def __init__(self, embed: Embed, url_view: ui.View):
@@ -353,6 +358,8 @@ TOKEN = os.environ["DISCORD_TOKEN"]
 intents = Intents.default()
 intents.message_content = True
 intents.members = True
+task_running = False
+logging.basicConfig(level=logging.INFO)
 client = Test(intents=intents)
 links = link_load() or []
 osu_link = osu_load() or {}
