@@ -296,6 +296,8 @@ class Test(Client):
       if res:
         p = re.search(r'\d+', res)
         await client.change_presence(activity=discord.Game(name=f"{p.group()}人がマイクラ"))
+      else:
+        await client.change_presence(activity=discord.Activity(name="テスト", type=5))
     except Exception as e:
       logging.error(f"エラー発生：{e}")
       await client.change_presence(activity=discord.Activity(name="テスト", type=5))
