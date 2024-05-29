@@ -296,8 +296,10 @@ class Test(Client):
         p = re.search(r'\d+', res)
         await client.change_presence(activity=discord.Game(name=f"{p.group()}人がマイクラ"))
     except Exception as e:
+      logging.error(f"エラー発生：{e}")
       await client.change_presence(activity=discord.Activity(name="テスト", type=5))
-    task_running = False
+    finally:
+      task_running = False
 
   #起動時
   async def on_ready(self):
