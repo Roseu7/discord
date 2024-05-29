@@ -291,7 +291,7 @@ class Test(Client):
           except:
             print(f"{guild}の{member}のニックネームを変更できず")
     try:
-      res = mc_getlist()
+      res = await mc_getlist()
       if res:
         p = re.search(r'\d+', res)
         await client.change_presence(activity=discord.Game(name=f"{p.group()}人がマイクラ"))
