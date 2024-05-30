@@ -1,11 +1,11 @@
 import pickle
 import os
 
-current_dir = os.path.dirname(os.path.abspath(__file__))
-links_p = os.path.join(current_dir, '..', 'data', 'links.pickle')
-osu_p = os.path.join(current_dir, '..', 'data', 'osu.pickle')
-name_p = os.path.join(current_dir, '..', 'data', 'name.pickle')
-other_p = os.path.join(current_dir, '..', 'data', 'data.pickle')
+mount_path = os.getenv('RAILWAY_VOLUME_MOUNT_PATH', '/data')
+links_p = os.path.join(mount_path, 'links.pickle')
+osu_p = os.path.join(mount_path, 'osu.pickle')
+name_p = os.path.join(mount_path, 'name.pickle')
+other_p = os.path.join(mount_path, 'data.pickle')
 
 def pickle_dump(obj, path):
     with open(path, mode="wb") as f:

@@ -224,6 +224,8 @@ class McGroup(Group):
       res = mc_getlist()
     except Exception as e:
       res = "エラーが発生しました。サーバーが開いていない可能性があります。"
+    if res == None:
+      res = "エラーが発生しました。サーバーが開いていない可能性があります。"
     await inter.response.send_message(res, ephemeral=True)
 
   @app_commands.command(name="edit", description="modsコマンド内容を編集します。(現在ろせのみ可能)")
