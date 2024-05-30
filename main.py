@@ -216,7 +216,10 @@ class McGroup(Group):
       ep = False
     else:
       ep = True
-    await inter.response.send_message(f"[ここをクリックしてダウンロードページを表示]({other_data["mods_url"]})", ephemeral=ep)
+    if "mods_url" in other_data:
+      await inter.response.send_message(f"[ここをクリックしてダウンロードページを表示]({other_data["mods_url"]})", ephemeral=ep)
+    else:
+      await inter.response.send_message("ダウンロードリンクが設定されていません。", ephemeral=True)
 
   @app_commands.command(name="list", description="マイクラの鯖が立っている場合のみ、参加している人を表示します。")
   async def list(self, inter: Interaction):
