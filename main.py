@@ -128,7 +128,7 @@ class ValoGroup(Group):
                 ["バインド", os.path.join(current_dir, "png", "valo", "bind.png")],
                 ["ヘイブン", os.path.join(current_dir, "png", "valo", "haven.png")],
                 ["スプリット", os.path.join(current_dir, "png", "valo", "split.png")],
-                ["アセント", os.path.join(current_dir, "png", "valo", "ascent.png")]
+                ["アセント", os.path.join(current_dir, "png", "valo", "ascent.png")],
                 ["アビス", os.path.join(current_dir, "png", "valo", "abyss.png")]]
     n = randint(0, 10)
     await inter.response.send_message(f"{map_list[n][0]}", file=File(map_list[n][1]))
